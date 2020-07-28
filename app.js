@@ -5,8 +5,8 @@ const specials = ['+', '-', '*', '/']
 function init() {
     console.log('ready');
     document.title = "Javascript Calculator";
-    let dec = false;
-    let eva = false;
+    let decimal = false;
+    let equals = false;
 
     const container = document.createElement('div');
     container.classList.add('container');
@@ -31,22 +31,30 @@ function init() {
         // console.log(value);
         btnMaker(value, addOutput);
     })
-    btnMaker('=', evalOutput);
+    btnMaker('=', equalslOutput);
     btnMaker('C', clearOutput);
 
-    function evalOutput() {
+    function colorOutput(v) {
+        output.style.border = v + ' 1px solid';
+        output.style.color = v;
+    }
+
+    function equalslOutput() {
         console.log('=');
-        output.style.border = 'black 1px solid';
+        colorOutput('black');
         if (output.value === "") {
-            output.style.border = 'red 1px solid';
+            colorOutput('red');
+        } else if (equals) {
+            colorOutput('red');
         } else {
-            output.value = eval(output.value);
+            output.value = equalsl(output.value);
         }
+        decimal = output.value.includes('.');
     }
 
     function clearOutput() {
         console.log('C');
-        output.style.border = 'black 1px solid';
+        colorOutput('black');
         output.value = '';
     }
 
@@ -64,18 +72,23 @@ function init() {
     }
 
     function addOutput(e) {
-        console.log(dec);
-        output.style.border = 'black 1px solid';
+        console.log(decimal);
+        colorOutput('black');
         console.log(e.target.value);
         let char = e.target.value;
-        
+
         if (char == '.') {
-            if (dec) {
+            if (decimal) {
                 char = '';
-                output.style.border = 'red 1px solid';
+                colorOutput('red')
             } else {
-                dec = true;
+                decimal = true;
             }
+        }
+
+        equals = specials.includes(char);
+        if (equals) {
+            decimal = false;
         }
         output.value += char;
     }
